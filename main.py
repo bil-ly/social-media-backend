@@ -1,7 +1,13 @@
 from fastapi import FastAPI
-from fastapi.params import Body
-
+from pydantic import BaseModel
+from typing import Dict
 app = FastAPI()
+
+
+class Post(BaseModel):
+    title : str = "Welcome to my instagram buddy"
+    content : str
+
 
 @app.get("/")
 async def root():
@@ -12,6 +18,9 @@ def getNames():
     return {"names": {"Abongile","Billy"}}
 
 @app.post("/name")
-async def addName(payload: dict=Body(...)):
-    print(payload)
-    return {"Name successfully added"}
+async def addName(payload:Post):
+    # Covert the model to dict
+    post_dict = payload.dict()
+    return {f"Post with title {post_dict['title']} successfully added"}
+
+
