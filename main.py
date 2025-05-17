@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import Dict
+import psycopg
+
 app = FastAPI()
 
 
@@ -8,6 +10,17 @@ class Post(BaseModel):
     title : str = "Welcome to my instagram buddy"
     content : str
 
+
+
+
+try:
+    conn = psycopg.connect("dbname=fastapi_media_app user=postgres password=Abilly#99")
+    cursor = conn.cursor
+    print("Success")
+
+except Exception as error:
+    print("Connection failed")
+    print(error)
 
 @app.get("/")
 async def root():
